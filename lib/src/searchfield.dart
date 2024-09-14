@@ -108,6 +108,9 @@ class SearchField<T> extends StatefulWidget {
   /// The parameters passed to`SearchFieldListItem` in `suggestions` will be returned in the callback.
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
 
+  /// Defines whether to apply the searchKey to the TextField when a suggestion is tapped.
+  final bool applySuggestionsSearchKey;
+
   /// Callback when the searchfield is searched.
   /// The callback should return a list of SearchFieldListItem based on custom logic which will be
   /// shown as suggestions.
@@ -359,6 +362,7 @@ class SearchField<T> extends StatefulWidget {
     this.onTapOutside,
     this.offset,
     this.onSuggestionTap,
+    this.applySuggestionsSearchKey = true,
     this.searchInputDecoration,
     this.scrollbarDecoration,
     this.showEmpty = false,
@@ -682,7 +686,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void onSuggestionTapped(SearchFieldListItem<T> item, int index) {
     {
       selected = index;
-      searchController!.text = item.searchKey;
+      if (widget.applySuggestionsSearchKey) {
+        searchController!.text = item.searchKey;
+      }
       searchController!.selection = TextSelection.fromPosition(
         TextPosition(
           offset: searchController!.text.length,
